@@ -1,13 +1,13 @@
 package main
 
 import (
-	"crawler/engine"
-	"crawler/zhenai/parser"
+	"github.com/xiangbaoyan/study_go_crawler/engine"
+	"github.com/xiangbaoyan/study_go_crawler/zhenai/parser"
 )
 
-func main(){
+func main() {
 	engine.Run(engine.Request{
-		Url: "http://www.zhenai.com/zhenghun",
+		Url:       "http://www.zhenai.com/zhenghun",
 		ParseFunc: parser.ParseCityList,
 	})
 }
