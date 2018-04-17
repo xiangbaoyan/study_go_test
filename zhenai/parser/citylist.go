@@ -1,0 +1,30 @@
+package parser
+
+import (
+	"regexp"
+	"crawler/engine"
+)
+
+const cityListRe = `<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`
+
+
+func ParseCityList(contents []byte)  engine.ParseResult{
+	compile := regexp.MustCompile(cityListRe)
+	matches := compile.FindAllSubmatch(contents, -1)
+	result := engine.ParseResult{}
+	for _, m := range matches {
+		result.Items = append(result.Items, string(m[2]))
+		//log.Printf("Got One Url,%s",string(m[1]))
+
+		result.Requests = append(
+			result.Requests,engine.Request{
+				Url:string(m[1]),
+				ParseFunc: engine.NilParser,
+				})
+	}
+
+	return result
+
+
+
+}
