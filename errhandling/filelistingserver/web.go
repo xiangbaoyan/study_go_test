@@ -3,9 +3,17 @@ package main
 import (
 	"fmt"
 	"github.com/xiangbaoyan/study_go_test/functional/fib/filelisting"
+	"log"
 	"net/http"
 	"os"
 )
+
+type userError interface {
+	//给系统看的
+	error
+	//给用户看的
+	Message() string
+}
 
 type appHandler func(writer http.ResponseWriter, request *http.Request) error
 
@@ -15,10 +23,19 @@ func errWrapper(handler appHandler) func(http.ResponseWriter, *http.Request) {
 	fmt.Println("进入到此")
 	//这是返回函数本身
 	return func(writer http.ResponseWriter, request *http.Request) {
-		fmt.Println("进入到此2")
-
+		defer func() {
+			if r := recover(); r != nil {
+				log.Printf("Panic: %v", r)
+				fmt.Println("草您个孙子55")
+				http.Error(writer, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			}
+		}()
 		err := handler(writer, request)
 		if err != nil {
+			if userErr, ok := err.(userError); ok {
+				http.Error(writer, userErr.Message(), http.StatusBadRequest)
+				return
+			}
 			code := http.StatusOK
 			switch {
 			case os.IsNotExist(err):
