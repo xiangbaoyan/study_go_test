@@ -1,12 +1,15 @@
 package filelisting
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 )
 
 func HandlerFileList(writer http.ResponseWriter, request *http.Request) error {
+
+	fmt.Println("7777")
 	path := request.URL.Path[len("/list/"):]
 	file, err := os.Open(path)
 	if err != nil {
