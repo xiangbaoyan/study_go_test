@@ -1,7 +1,6 @@
 package filelisting
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
