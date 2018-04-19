@@ -8,6 +8,7 @@ func (q *Queue) Pop() int {
 	return head
 }
 
+//Push Element into the queue
 func (q *Queue) Push(a int) {
 	*q = append(*q, a)
 }
