@@ -15,6 +15,8 @@ func ArraySource(a ...int) <-chan int {
 			ch <- v
 		}
 		//close第二版放在这就成功了，原因：放下边关得太快了
+
+		//clsoe 代表没数据了，不要等待发了，就不会出现 deadlock
 		close(ch)
 
 	}()

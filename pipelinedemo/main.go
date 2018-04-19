@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/xiangbaoyan/study_go_test/pipeline"
-	"time"
 )
 
 func main() {
@@ -12,5 +11,5 @@ func main() {
 		fmt.Println(v)
 	}
 
-	time.Sleep(time.Second)
+	//time.Sleep(time.Second)
 }
