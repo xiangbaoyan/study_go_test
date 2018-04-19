@@ -1,7 +1,10 @@
 package pipeline
 
 import (
+	"encoding/binary"
 	"fmt"
+	"io"
+	"math/rand"
 	"sort"
 )
 
@@ -58,6 +61,47 @@ func Merge(c1, c2 <-chan int) <-chan int {
 
 			}
 		}
+		close(out)
+	}()
+	return out
+}
+
+//演示从reader 读数据
+func ReadSource(r io.Reader) <-chan int {
+	out := make(chan int)
+	go func() {
+		buffer := make([]byte, 8)
+		for {
+			n, err := r.Read(buffer)
+			if n > 0 {
+				v := int(binary.BigEndian.Uint64(buffer))
+				out <- v
+			}
+			if err != nil {
+				break
+			}
+		}
+		close(out)
+	}()
+	return out
+}
+func WriteSink(writer io.Writer, in <-chan int) {
+	for v := range in {
+		//写的时候得放在里面，
+		buffer := make([]byte, 8)
+		binary.BigEndian.PutUint64(buffer, uint64(v))
+		writer.Write(buffer)
+	}
+}
+
+//重点应该看怎么用
+func RandomSource(count int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for i := 0; i < count; i++ {
+			out <- rand.Int()
+		}
+		//视频上没关闭，我觉得应该关闭
 		close(out)
 	}()
 	return out
