@@ -40,3 +40,25 @@ func InMemorySort(in <-chan int) <-chan int {
 	}()
 	return out
 }
+func Merge(c1, c2 <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		v1, ok1 := <-c1
+		v2, ok2 := <-c2
+		for ok1 || ok2 {
+			if !ok2 || (ok1 && v1 <= v2) {
+				out <- v1
+
+				//这边只是v1获取新值了，原先的v2没动参与下次比较
+				v1, ok1 = <-c1
+			} else {
+
+				out <- v2
+				v2, ok2 = <-c2
+
+			}
+		}
+		close(out)
+	}()
+	return out
+}
