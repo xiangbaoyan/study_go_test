@@ -2,36 +2,36 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"io"
+	"os"
+	"strings"
 )
 
-func put(ch *chan int, arr []int) {
-	go func() {
-		for _, v := range arr {
-			*ch <- v
-		}
-		close(*ch)
-	}()
+/**
+num 指定缓存区大小
+*/
+func ReadFrom(r io.Reader, num int) ([]byte, error) {
+	p := make([]byte, num)
+	n, err := r.Read(p)
+	if n > 0 {
+		return p[:n], err
+	}
+	return nil, err
+
 }
 
+func SimpleRead() {
+	bytes, _ := ReadFrom(strings.NewReader("bbbcccaaaddd你好么"), 12)
+	fmt.Println(bytes)
+
+}
+
+func SimpleReadFromStdIn() {
+	fmt.Println("read from stdin")
+	bytes, _ := ReadFrom(os.Stdin, 11)
+	fmt.Println(bytes)
+
+}
 func main() {
-	ch1 := make(chan int)
-	ch2 := make(chan int)
-	arr1 := []int{
-		8, 6, 10, 6, 7, 43, 11, 22, 11, 99, 78,
-	}
-
-	arr2 := []int{
-		3, 2, 4, 6, 7, 43, 11, 22,
-	}
-	put(&ch1, arr1)
-	put(&ch2, arr2)
-
-	for {
-		v1, ok1 := <-ch1
-		v2, ok2 := <-ch2
-		fmt.Printf("ch1值:%d,ok1结果%v===="+"ch2值:%d,ok2结果%v\n", v1, ok1, v2, ok2)
-		time.Sleep(time.Second * 2)
-	}
-
+	SimpleReadFromStdIn()
 }
