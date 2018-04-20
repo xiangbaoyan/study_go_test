@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
@@ -32,6 +33,20 @@ func SimpleReadFromStdIn() {
 	fmt.Println(bytes)
 
 }
+
+func BufioRead() {
+	r := strings.NewReader("hello,th")
+	p := bufio.NewReader(r)
+	//peek 是偷窥读取的意思
+	//bytes, _ := p.Peek(5)
+	//fmt.Println(string(bytes))
+	//
+	//fmt.Println(p.Buffered())
+	//ReadString 读了输出来的意思，所以buffered就剩2个
+	str, _ := p.ReadString(',')
+	fmt.Println(str, p.Buffered())
+
+}
 func main() {
-	SimpleReadFromStdIn()
+	BufioRead()
 }
