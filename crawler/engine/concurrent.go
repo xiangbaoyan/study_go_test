@@ -39,7 +39,6 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	//收out 处理
 	for {
 		result := <-out
-		log.Println("到达处理处...")
 
 		itemCount := 0
 		for _, item := range result.Items {
@@ -49,6 +48,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		}
 
 		for _, request := range result.Requests {
+			//在此处加入队列中
 			e.Scheduler.Submit(request)
 		}
 
