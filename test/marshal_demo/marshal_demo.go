@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"encoding/xml"
 	"fmt"
+	"os"
 )
 
 type body struct {
@@ -31,6 +33,16 @@ func main() {
 	if e != nil {
 		panic(e)
 	}
+	file, i := os.Create("testMarshal.txt")
+	defer file.Close()
+	if i != nil {
+		panic(i)
+	}
+	writer := bufio.NewWriter(file)
+
+	writer.Write(bytes)
+	writer.Flush()
+
 	//
 	//new_p := new(person)
 	//xml.Unmarshal(bytes,new_p)
