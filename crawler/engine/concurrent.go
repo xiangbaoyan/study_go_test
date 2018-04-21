@@ -25,6 +25,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	//异步执行 ，但是会卡死 10个
 	//先建立起异步执行流程
 	for i := 0; i < e.WorkerCount; i++ {
+		//问题是结果放在 out 中怎么再处理
 		createWorker(in, out)
 	}
 	//首次先加入一个主地址
