@@ -40,8 +40,11 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	for {
 		result := <-out
 		log.Println("到达处理处...")
+
+		itemCount := 0
 		for _, item := range result.Items {
-			log.Printf("Got item %v", item)
+			log.Printf("Got item #%d:%v", itemCount, item)
+			itemCount++
 		}
 
 		for _, request := range result.Requests {
