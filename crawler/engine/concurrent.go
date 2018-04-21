@@ -45,6 +45,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		for _, item := range result.Items {
 			log.Printf("Got item #%d:%v", itemCount, item)
 			itemCount++
+
 		}
 
 		for _, request := range result.Requests {
