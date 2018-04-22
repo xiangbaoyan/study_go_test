@@ -1,41 +1,17 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"golang.org/x/net/html/charset"
-	"golang.org/x/text/encoding"
-	"golang.org/x/text/transform"
-	"io"
-	"io/ioutil"
-	"net/http"
-	"regexp"
+	"github.com/xiangbaoyan/study_go_test/crawler/fetcher"
 )
 
 func main() {
-	resp, err := http.Get("http://www.zhenai.com/zhenghun")
+	//http://album.zhenai.com/u/107157060
+	//http://album.zhenai.com/u/108816494
+	//http://album.zhenai.com/u/1753109395
+	bytes, err := fetcher.Fetch("http://album.zhenai.com/u/1753109395")
 	if err != nil {
 		panic(err)
 	}
-	defer resp.Body.Close()
-	if resp.StatusCode == http.StatusOK {
-		//中文解析
-		e := determineEncoding(resp.Body)
-		utf8Reader := transform.NewReader(resp.Body, e.NewDecoder())
-		all, err := ioutil.ReadAll(utf8Reader)
-		if err != nil {
-			panic(err)
-		}
-		printCityList(all)
-	}
-}
-
-func printCityList(contents []byte) {
-	compile := regexp.MustCompile(`<a href="(http://www.zhenai.com/zhenghun/[0-9A-Za-z]+)"[^>]*>([^<]+)</a>`)
-	matches := compile.FindAllSubmatch(contents, -1)
-	for _, m := range matches {
-		fmt.Printf("City: %s,URL: %s\n", m[2], m[1])
-	}
-
-	fmt.Printf("Matched found: %d\n", len(matches))
+	fmt.Println(string(bytes))
 }
