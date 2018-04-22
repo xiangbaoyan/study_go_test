@@ -12,9 +12,21 @@ import (
 
 //var rateLimiter = time.Tick(300 * time.Millisecond)
 
+var (
+	client = &http.Client{}
+)
+
 func Fetch(url string) ([]byte, error) {
-	//<-rateLimiter
-	resp, err := http.Get(url)
+	request, err := http.NewRequest("GET", url, nil)
+	//request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Add("User-Agent", `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11`)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := client.Do(request)
+
+	////<-rateLimiter
+	//resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
 	}

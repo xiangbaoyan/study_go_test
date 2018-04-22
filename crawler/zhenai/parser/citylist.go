@@ -14,7 +14,7 @@ func ParseCityList(contents []byte) engine.ParseResult {
 	matches := compile.FindAllSubmatch(contents, -1)
 	result := engine.ParseResult{}
 	for _, m := range matches {
-		result.Items = append(result.Items, string(m[2]))
+		//result.Items = append(result.Items, string(m[2]))
 		log.Printf("Got One Url,%s", string(m[1]))
 
 		result.Requests = append(

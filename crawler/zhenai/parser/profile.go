@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-var ageRe = regexp.MustCompile(`<td><span class="label">年龄：</span>([\d]+)岁</td`)
+var ageRe = regexp.MustCompile(`<td><span class="label">年龄：</span>([\d]+)岁</td>`)
 var marriageRe = regexp.MustCompile(`<td><span class="label">婚况：</span>([^<]+)</td>`)
 var genderRe = regexp.MustCompile(`<td><span class="label">性别：</span><span field="">([^<]+)</span></td>`)
 var heightRe = regexp.MustCompile(`<td><span class="label">身高：</span>([\d]+)CM</td>`)
@@ -22,10 +22,10 @@ var carRe = regexp.MustCompile(`<td><span class="label">是否购车：</span><s
 
 func ParseProfile(contents []byte, name string) engine.ParseResult {
 	profile := modal.Profile{}
-
 	profile.Name = name
+
 	age, e := strconv.Atoi(string(extractString(contents, ageRe)))
-	if e == nil {
+	if e != nil {
 		profile.Age = age
 	}
 	profile.Gender = extractString(contents, genderRe)
@@ -56,7 +56,7 @@ func ParseProfile(contents []byte, name string) engine.ParseResult {
 
 func extractString(contents []byte, re *regexp.Regexp) string {
 	match := re.FindSubmatch(contents)
-	if len(match) > 2 {
+	if len(match) > 1 {
 		return string(match[1])
 	} else {
 		return ""
