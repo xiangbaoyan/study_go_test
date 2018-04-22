@@ -11,7 +11,7 @@ func main() {
 	e := engine.ConcurrentEngine{
 		//在这传入的schedule 的类型
 		Scheduler:   &scheduler.SimpleScheduler{},
-		WorkerCount: 10,
+		WorkerCount: 100,
 	}
 	request := engine.Request{
 		Url:       "http://www.zhenai.com/zhenghun",
