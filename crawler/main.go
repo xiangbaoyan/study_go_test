@@ -10,7 +10,7 @@ func main() {
 
 	e := engine.ConcurrentEngine{
 		//在这传入的schedule 的类型
-		Scheduler:   &scheduler.SimpleScheduler{},
+		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
 	}
 	request := engine.Request{
