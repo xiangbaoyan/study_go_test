@@ -8,10 +8,15 @@ type ConcurrentEngine struct {
 }
 
 type Scheduler interface {
+	ReadyNotifier
 	Submit(Request)
-	ConfigureMasterWorkChan(chan Request)
-	WorkerReady(chan Request)
+	//我有一个worker 请问给我哪个channel
+	WorkChan() chan Request
 	Run()
+}
+
+type ReadyNotifier interface {
+	WorkerReady(chan Request)
 }
 
 func (e *ConcurrentEngine) Run(seeds ...Request) {
@@ -24,7 +29,8 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	for i := 0; i < e.WorkerCount; i++ {
 		//问题是结果放在 out 中怎么再处理
 		//这里就建了10个
-		createWorker(out, e.Scheduler)
+		//开10个处理器不断执行
+		createWorker(e.Scheduler.WorkChan(), out, e.Scheduler)
 	}
 	//首次先加入一个主地址 ,把seeds 送进去
 	for _, r := range seeds {
@@ -53,17 +59,17 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 //是从request in中拿数据处理，返回到out （处理结果chan）中
 //这个是一个过程 处理过程就是放在 goroutine 中执异步执行
 //这是异步执行的过程，不是chan
-func createWorker(out chan ParseResult, s Scheduler) {
-
-	in := make(chan Request)
-
+func createWorker(in chan Request, out chan ParseResult, read ReadyNotifier) {
 	//这是个gorouting ，执行完就释放了
 	go func() {
 		for {
 			//从这对worker队列不断加入的
 			//这个队列不断接受request
 			//不断创建worker conn
-			s.WorkerReady(in)
+			//这里代表可以放同样的
+
+			//问题是workCount 是什么含义，大概是开10个处理器
+			read.WorkerReady(in)
 			//in 代表所有要处理的request
 			request := <-in
 			//在这进行处理
