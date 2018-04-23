@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func ItemSaver() (chan engine.Item, error) {
+func ItemSaver(index string) (chan engine.Item, error) {
 	out := make(chan engine.Item)
 	//这只是打开一个通道接受
 
@@ -22,7 +22,7 @@ func ItemSaver() (chan engine.Item, error) {
 			item := <-out
 			log.Printf("Item Saver: got item #%d:%v", itemCount, item)
 			itemCount++
-			err := save(client, item)
+			err := save(client, index, item)
 			if err != nil {
 				log.Printf("Item Sa ver:error saving item : %v %v", item, err)
 			}
@@ -32,13 +32,13 @@ func ItemSaver() (chan engine.Item, error) {
 	return out, nil
 }
 
-func save(client *elastic.Client, item engine.Item) (err error) {
+func save(client *elastic.Client, index string, item engine.Item) (err error) {
 
 	if item.Type == "" {
 		return errors.New("must supply item Type")
 	}
 	//第一个Index 就相当于存数据，相对于get
-	indexService := client.Index().Index("date_profile").
+	indexService := client.Index().Index(index).
 		Type(item.Type).
 		BodyJson(item)
 

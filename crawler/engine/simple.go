@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"github.com/xiangbaoyan/study_go_test/crawler/fetcher"
 	"log"
 )
 
@@ -29,18 +28,4 @@ func (e SimpleEngine) Run(seeds ...Request) {
 		}
 
 	}
-}
-
-//处理一个request 返回 处理结果的过程
-func worker(r Request) (ParseResult, error) {
-	log.Printf("Fetching %s", r.Url)
-	body, err := fetcher.Fetch(r.Url)
-	if err != nil {
-		log.Printf("Fetch Error"+
-			"Fetching url %s: %v",
-			r.Url, err)
-		return ParseResult{}, err
-	}
-
-	return r.ParseFunc(body), nil
 }

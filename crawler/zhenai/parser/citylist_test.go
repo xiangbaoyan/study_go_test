@@ -12,7 +12,7 @@ func TestParseCityList(t *testing.T) {
 
 		panic("获取失败")
 	}
-	result := ParseCityList(contents)
+	result := ParseCityList(contents, "")
 
 	const resultSize = 470
 
@@ -43,7 +43,7 @@ func BenchmarkParseCityList(b *testing.B) {
 
 		panic("获取失败")
 	}
-	result := ParseCityList(contents)
+	result := ParseCityList(contents, "")
 
 	const resultSize = 470
 

@@ -64,11 +64,10 @@ func ParseProfile(contents []byte, url string, name string) engine.ParseResult {
 	}
 	matches := guessRes.FindAllSubmatch(contents, -1)
 	for _, m := range matches {
-		name := string(m[2])
 		url := string(m[1])
 		result.Requests = append(result.Requests, engine.Request{
 			Url:       url,
-			ParseFunc: ProfileParser(name, url),
+			ParseFunc: ProfileParser(string(m[2])),
 		})
 	}
 	return result
@@ -85,8 +84,10 @@ func extractString(contents []byte, re *regexp.Regexp) string {
 
 }
 
-func ProfileParser(name string, url string) engine.ParseFunc {
-	return func(c []byte) engine.ParseResult {
+//这里url 就不用给了，url 会由engine 给
+func ProfileParser(name string) engine.ParseFunc {
+
+	return func(c []byte, url string) engine.ParseResult {
 		return ParseProfile(c, url, name)
 	}
 }

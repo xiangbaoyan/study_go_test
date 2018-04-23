@@ -2,10 +2,10 @@ package engine
 
 import "log"
 
-type ParseFunc func([]byte) ParseResult
+type ParseFunc func(contents []byte, url string) ParseResult
 type Request struct {
 	Url       string
-	ParseFunc func([]byte) ParseResult
+	ParseFunc ParseFunc
 }
 
 type ParseResult struct {

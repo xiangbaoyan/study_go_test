@@ -30,7 +30,12 @@ func TestSaver(t *testing.T) {
 			Car:        "未购车",
 		},
 	}
-	err := save(expected)
+	client, err := elastic.NewClient(elastic.SetSniff(false))
+	if err != nil {
+		panic(err)
+	}
+	const index = "dating_test"
+	err = save(client, index, expected)
 
 	if err != nil {
 		panic(err)
@@ -39,7 +44,8 @@ func TestSaver(t *testing.T) {
 	if e != nil {
 		panic(e)
 	}
-	result, err := client.Get().Index("date_profile").Type(expected.Type).Id(expected.Id).Do(context.Background())
+	result, err := client.Get().Index(index).
+		Type(expected.Type).Id(expected.Id).Do(context.Background())
 	if err != nil {
 		panic(err)
 	}
