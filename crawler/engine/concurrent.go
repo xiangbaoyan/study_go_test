@@ -3,7 +3,7 @@ package engine
 type ConcurrentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
-	ItemChan    chan interface{}
+	ItemChan    chan Item
 }
 
 type Scheduler interface {
@@ -64,7 +64,7 @@ func createWorker(in chan Request, out chan ParseResult, read ReadyNotifier) {
 			//不断创建worker conn
 			//这里代表可以放同样的
 
-			//问题是workCount 是什么含义，大概是开10个处理器
+			//问题是workCount 是什么含 义，大概是开10个处理器
 			read.WorkerReady(in)
 			//in 代表所有要处理的request
 			request := <-in
@@ -77,4 +77,15 @@ func createWorker(in chan Request, out chan ParseResult, read ReadyNotifier) {
 			out <- result
 		}
 	}()
+}
+
+var visitedUrls = make(map[string]bool)
+
+func isDuplicated(url string) bool {
+	if visitedUrls[url] {
+		return true
+	}
+
+	visitedUrls[url] = true
+	return false
 }

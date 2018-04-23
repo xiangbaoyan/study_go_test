@@ -8,15 +8,17 @@ import (
 	"golang.org/x/text/transform"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
-//var rateLimiter = time.Tick(300 * time.Millisecond)
+var rateLimiter = time.Tick(10 * time.Millisecond)
 
 var (
 	client = &http.Client{}
 )
 
 func Fetch(url string) ([]byte, error) {
+	<-rateLimiter
 	request, err := http.NewRequest("GET", url, nil)
 	//request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	request.Header.Add("User-Agent", `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11`)

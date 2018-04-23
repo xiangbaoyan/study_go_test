@@ -8,12 +8,16 @@ import (
 )
 
 func main() {
-
+	itemChan, err := persist.ItemSaver()
+	if err != nil {
+		panic(err)
+	}
 	e := engine.ConcurrentEngine{
 		//在这传入的schedule 的类型
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
-		ItemChan:    persist.ItemSaver(),
+		//这个类型是返回值 chan
+		ItemChan: itemChan,
 	}
 	//request := engine.Request{
 	//	Url:       "http://www.zhenai.com/zhenghun",

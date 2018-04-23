@@ -2,6 +2,7 @@ package engine
 
 import "log"
 
+type ParseFunc func([]byte) ParseResult
 type Request struct {
 	Url       string
 	ParseFunc func([]byte) ParseResult
@@ -9,7 +10,14 @@ type Request struct {
 
 type ParseResult struct {
 	Requests []Request
-	Items    []interface{}
+	Items    []Item
+}
+
+type Item struct {
+	Url     string
+	Id      string
+	Type    string
+	Payload interface{}
 }
 
 func NilParser([]byte) ParseResult {

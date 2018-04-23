@@ -21,7 +21,7 @@ func ParseCity(contents []byte) engine.ParseResult {
 		result.Requests = append(result.Requests, engine.Request{
 			Url: string(m[1]),
 			ParseFunc: func(contents []byte) engine.ParseResult {
-				return ParseProfile(contents, string(m[2]))
+				return ParseProfile(contents, string(m[1]), string(m[2]))
 			},
 		})
 		//limit--
