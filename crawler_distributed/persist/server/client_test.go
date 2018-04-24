@@ -15,7 +15,7 @@ import (
 //因为service 开在指针类型上所以报上面的错
 func TestItemSaver(t *testing.T) {
 	host := ":1234"
-	//放一个server
+	//放一个server，出错后就不会注册和创建rpc 服务
 	go serveRpc(host, "test1")
 	time.Sleep(time.Second * 2)
 

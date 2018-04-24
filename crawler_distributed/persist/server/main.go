@@ -19,6 +19,7 @@ func main() {
 
 func serveRpc(host, index string) error {
 	client, err := elastic.NewClient(elastic.SetSniff(false))
+	//就因为这个地方 ！ 写成 = 出错 ，
 	if err != nil {
 		return err
 	}
