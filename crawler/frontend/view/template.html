@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <title>测试页面</title>
+
+</head>
+<body>
+<div class="header">
+    &nbsp;
+</div>
+<div class="container">
+
+    <div class="seach_block row">
+        <div class="search_input col-sm-10">
+            <input type="text" class="form-control" id="search_input">
+        </div>
+        <div class="search_btn col-sm-2">
+            <button type="submit" class="btn btn-primary mb-2">搜索</button>
+        </div>
+    </div>
+    <div class="search_tip row">
+        <div class="col-sm-12">
+            <p class="text-center">共为您找到结果为{{.Hits}}个。显示从{{.Start}}起共{{len .Items}}个</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .Items}}
+        <tr>
+        {{with .Payload}}
+            <td><a href="{{.Url}}">{{.Name}}</a></td>
+            <td>{{.Gender}}</td>
+            <td>{{.Age}}</td>
+            <td>{{.Height}}</td>
+            <td>{{.Weight}}</td>
+            <td>{{.Income}}</td>
+            <td>{{.Education}}</td>
+            <td>{{.Occupation}}</td>
+            <td>{{.Hokou}}</td>
+            <td>{{.Xinzuo}}</td>
+            <td>{{.House}}</td>
+            <td>{{.Car}}</td>
+        {{end}}
+        </tr>
+        {{else}}
+        <div>没有找到相关的用户</div>
+        {{end}}
+        </tbody>
+    </table>
+</div>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

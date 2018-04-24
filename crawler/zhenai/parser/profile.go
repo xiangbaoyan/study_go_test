@@ -30,7 +30,7 @@ func ParseProfile(contents []byte, url string, name string) engine.ParseResult {
 	profile.Name = name
 
 	age, e := strconv.Atoi(string(extractString(contents, ageRe)))
-	if e != nil {
+	if e == nil {
 		profile.Age = age
 	}
 	profile.Gender = extractString(contents, genderRe)
