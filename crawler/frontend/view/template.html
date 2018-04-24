@@ -12,15 +12,17 @@
     &nbsp;
 </div>
 <div class="container">
+    <form method="get">
+        <div class="seach_block row">
+            <div class="search_input col-sm-10">
+                <input type="text" class="form-control" id="search_input" value="{{.Query}}" name="q">
+            </div>
+            <div class="search_btn col-sm-2">
+                <button type="submit" class="btn btn-primary mb-2">搜索</button>
+            </div>
+        </div>
+    </form>
 
-    <div class="seach_block row">
-        <div class="search_input col-sm-10">
-            <input type="text" class="form-control" id="search_input">
-        </div>
-        <div class="search_btn col-sm-2">
-            <button type="submit" class="btn btn-primary mb-2">搜索</button>
-        </div>
-    </div>
     <div class="search_tip row">
         <div class="col-sm-12">
             <p class="text-center">共为您找到结果为{{.Hits}}个。显示从{{.Start}}起共{{len .Items}}个</p>
@@ -69,6 +71,18 @@
         {{end}}
         </tbody>
     </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+        {{if .PrevFrom ge 0}}
+            <li class="page-item"><a class="page-link" href="search?q={{.Query}}&from={{.PrevFrom}}">Previous</a></li>
+        {{end}}
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="search?q={{.Query}}&from={{.NextFrom}}">Next</a></li>
+        </ul>
+    </nav>
 </div>
 
 

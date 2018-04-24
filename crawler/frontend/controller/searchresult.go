@@ -8,6 +8,7 @@ import (
 	"gopkg.in/olivere/elastic.v5"
 	"net/http"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -51,8 +52,10 @@ func (h SearchResultHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 
 func (h SearchResultHandler) getSearchResult(q string, from int) (modal.SearchResult, error) {
 	var result modal.SearchResult
+	result.Query = q
+
 	resp, err := h.client.Search("dating_profile").
-		Query(elastic.NewQueryStringQuery(q)).
+		Query(elastic.NewQueryStringQuery(rewriteQuery(q))).
 		From(from).
 		Do(context.Background())
 
@@ -68,5 +71,9 @@ func (h SearchResultHandler) getSearchResult(q string, from int) (modal.SearchRe
 	result.Items = resp.Each(
 		reflect.TypeOf(engine.Item{}))
 	return result, nil
+}
 
+func rewriteQuery(s string) string {
+	re := regexp.MustCompile(`([A-Z][a-z]*):`)
+	return re.ReplaceAllString(s, "Payload.$1:")
 }
