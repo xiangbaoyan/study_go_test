@@ -70,6 +70,12 @@ func (h SearchResultHandler) getSearchResult(q string, from int) (modal.SearchRe
 	//}
 	result.Items = resp.Each(
 		reflect.TypeOf(engine.Item{}))
+
+	result.PrevFrom =
+		result.Start - len(result.Items)
+
+	result.NextFrom = result.Start + len(result.Items)
+
 	return result, nil
 }
 
