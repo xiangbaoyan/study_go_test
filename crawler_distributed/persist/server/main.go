@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/xiangbaoyan/study_go_test/crawler_distributed/config"
 	"github.com/xiangbaoyan/study_go_test/crawler_distributed/persist"
 	"github.com/xiangbaoyan/study_go_test/crawler_distributed/rpcsupport"
 	"github.com/xiangbaoyan/study_go_test/lang/rpc"
@@ -11,7 +13,7 @@ func main() {
 	//为了测试方便，可以把下边提取出方法
 	//log.Fatal(serveRpc(":1234", "dating_profile"))
 
-	err := serveRpc(":1234", "dating_profile")
+	err := serveRpc(fmt.Sprintf(":%d", config.ItemSaverPort), config.ElasticIndex)
 	if err != nil {
 		panic(err)
 	}

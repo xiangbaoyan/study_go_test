@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/xiangbaoyan/study_go_test/crawler/engine"
 	"github.com/xiangbaoyan/study_go_test/crawler/modal"
+	"github.com/xiangbaoyan/study_go_test/crawler_distributed/config"
 	"github.com/xiangbaoyan/study_go_test/crawler_distributed/rpcsupport"
 	"github.com/xiangbaoyan/study_go_test/lang/rpc"
 	"testing"
@@ -44,7 +45,7 @@ func TestItemSaver(t *testing.T) {
 		},
 	}
 	result := ""
-	err = client.Call("ItemSaverService.Save", item, &result)
+	err = client.Call(config.ItemSaverRpc, item, &result)
 	if err != nil {
 		panic(err)
 	}
