@@ -18,6 +18,8 @@ type userError interface {
 type appHandler func(writer http.ResponseWriter, request *http.Request) error
 
 //返回参数类型
+
+//这里可能只是包装，到时候执行
 func errWrapper(handler appHandler) func(http.ResponseWriter, *http.Request) {
 
 	fmt.Println("进入到此")
@@ -53,6 +55,7 @@ func errWrapper(handler appHandler) func(http.ResponseWriter, *http.Request) {
 func main() {
 	fmt.Println("运行中")
 	//http.HandleFunc("list/errhandling/filelistingserver/web.go ")
+	//这里本身就是放个func ，并不执行，有请求的的时候才执行，这就是包装的思想
 	http.HandleFunc("/", errWrapper(filelisting.HandlerFileList))
 	err := http.ListenAndServe(":8888", nil)
 	if err != nil {

@@ -24,8 +24,8 @@ func main() {
 	//	ParseFunc: parser.ParseCityList,
 	//}
 	request := engine.Request{
-		Url:       "http://www.zhenai.com/zhenghun/shanghai",
-		ParseFunc: parser.ParseCity,
+		Url:    "http://www.zhenai.com/zhenghun/shanghai",
+		Parser: engine.NewFuncParser(parser.ParseCity, "ParseCity"),
 	}
 	e.Run(request)
 }

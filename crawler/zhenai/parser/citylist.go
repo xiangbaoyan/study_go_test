@@ -19,8 +19,9 @@ func ParseCityList(contents []byte, _ string) engine.ParseResult {
 
 		result.Requests = append(
 			result.Requests, engine.Request{
-				Url:       string(m[1]),
-				ParseFunc: ParseCity,
+				Url: string(m[1]),
+				//看到这个字符串，就会调用那个函数
+				Parser: engine.NewFuncParser(ParseCity, "ParseCity"),
 			})
 	}
 

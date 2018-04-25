@@ -25,7 +25,7 @@ var guessRes = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://al
 
 var idUrlRe = regexp.MustCompile(`http://album.zhenai.com/u/([0-9]+)`)
 
-func ParseProfile(contents []byte, url string, name string) engine.ParseResult {
+func parseProfile(contents []byte, url string, name string) engine.ParseResult {
 	profile := modal.Profile{}
 	profile.Name = name
 
@@ -66,8 +66,8 @@ func ParseProfile(contents []byte, url string, name string) engine.ParseResult {
 	for _, m := range matches {
 		url := string(m[1])
 		result.Requests = append(result.Requests, engine.Request{
-			Url:       url,
-			ParseFunc: ProfileParser(string(m[2])),
+			Url:    url,
+			Parser: NewProfileParser(string(m[2])),
 		})
 	}
 	return result
@@ -84,10 +84,30 @@ func extractString(contents []byte, re *regexp.Regexp) string {
 
 }
 
-//这里url 就不用给了，url 会由engine 给
-func ProfileParser(name string) engine.ParseFunc {
-
-	return func(c []byte, url string) engine.ParseResult {
-		return ParseProfile(c, url, name)
-	}
+type ProfileParser struct {
+	userName string
 }
+
+//这种方式用实例化的方法调用方法
+func (p *ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
+	return parseProfile(contents, url, p.userName)
+}
+
+func (p *ProfileParser) Serialize() (name string, args interface{}) {
+	return "ProfileParser", p.userName
+}
+
+func NewProfileParser(name string) *ProfileParser {
+	return &ProfileParser{
+		userName: name,
+	}
+
+}
+
+//这里url 就不用给了，url 会由engine 给
+//func ProfileParser(name string) engine.ParseFunc {
+//
+//	return func(c []byte, url string) engine.ParseResult {
+//		return ParseProfile(c, url, name)
+//	}
+//}
