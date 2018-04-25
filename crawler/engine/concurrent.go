@@ -1,10 +1,13 @@
 package engine
 
 type ConcurrentEngine struct {
-	Scheduler   Scheduler
-	WorkerCount int
-	ItemChan    chan Item
+	Scheduler        Scheduler
+	WorkerCount      int
+	ItemChan         chan Item
+	RequestProcessor Processor
 }
+
+type Processor func(r Request) (ParseResult, error)
 
 type Scheduler interface {
 	ReadyNotifier
@@ -29,7 +32,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		//问题是结果放在 out 中怎么再处理
 		//这里就建了10个
 		//开10个处理器不断执行
-		createWorker(e.Scheduler.WorkChan(), out, e.Scheduler)
+		e.createWorker(e.Scheduler.WorkChan(), out, e.Scheduler)
 	}
 	//首次先加入一个主地址 ,把seeds 送进去
 	for _, r := range seeds {
@@ -55,7 +58,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 //是从request in中拿数据处理，返回到out （处理结果chan）中
 //这个是一个过程 处理过程就是放在 goroutine 中执异步执行
 //这是异步执行的过程，不是chan
-func createWorker(in chan Request, out chan ParseResult, read ReadyNotifier) {
+func (e *ConcurrentEngine) createWorker(in chan Request, out chan ParseResult, read ReadyNotifier) {
 	//这是个gorouting ，执行完就释放了
 	go func() {
 		for {
@@ -69,7 +72,7 @@ func createWorker(in chan Request, out chan ParseResult, read ReadyNotifier) {
 			//in 代表所有要处理的request
 			request := <-in
 			//在这进行处理
-			result, err := Worker(request)
+			result, err := e.RequestProcessor(request) //Worker// Worker(request)换成rpc
 			if err != nil {
 				continue
 			}

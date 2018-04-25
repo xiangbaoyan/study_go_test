@@ -17,7 +17,8 @@ func main() {
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
 		//这个类型是返回值 chan
-		ItemChan: itemChan,
+		ItemChan:         itemChan,
+		RequestProcessor: engine.Worker,
 	}
 	//request := engine.Request{
 	//	Url:       "http://www.zhenai.com/zhenghun",
