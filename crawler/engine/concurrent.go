@@ -69,7 +69,7 @@ func createWorker(in chan Request, out chan ParseResult, read ReadyNotifier) {
 			//in 代表所有要处理的request
 			request := <-in
 			//在这进行处理
-			result, err := worker(request)
+			result, err := Worker(request)
 			if err != nil {
 				continue
 			}
