@@ -1,22 +1,30 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/xiangbaoyan/study_go_test/crawler_distributed/config"
 	"github.com/xiangbaoyan/study_go_test/crawler_distributed/persist"
 	"github.com/xiangbaoyan/study_go_test/crawler_distributed/rpcsupport"
 	"github.com/xiangbaoyan/study_go_test/lang/rpc"
 	"gopkg.in/olivere/elastic.v5"
+	"log"
 )
 
+var port = flag.Int("port", 0, "the port for me to listen")
+
 func main() {
+
+	flag.Parse()
+	if *port == 0 {
+		fmt.Println("must specified a port")
+		return
+	}
 	//为了测试方便，可以把下边提取出方法
 	//log.Fatal(serveRpc(":1234", "dating_profile"))
 
-	err := serveRpc(fmt.Sprintf(":%d", config.ItemSaverPort), config.ElasticIndex)
-	if err != nil {
-		panic(err)
-	}
+	log.Fatal(serveRpc(fmt.Sprintf(":%d", config.ItemSaverPort), config.ElasticIndex))
+
 }
 
 func serveRpc(host, index string) error {
